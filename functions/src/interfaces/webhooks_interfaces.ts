@@ -227,3 +227,12 @@ export interface WhatsappAPIVideo {
   /** The mime type for the video file. */
   mime_type: string;
 }
+
+export interface WhatsappAPIMediaData {
+  messaging_product: "whatsapp";
+  url: string;
+  mime_type: string;
+  sha256: string;
+  file_size: string;
+  id: string;
+}
