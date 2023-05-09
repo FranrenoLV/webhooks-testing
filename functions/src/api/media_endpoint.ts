@@ -14,7 +14,7 @@ class MediaEndpoint {
   private async fetchData(url: string): Promise<Result<Response, Error>> {
     const options = {
       method: "GET",
-      headers: { Authorization: this.getAccessToken() },
+      headers: {Authorization: this.getAccessToken()},
     };
 
     return await fetch(url, options).then(async (fetchResponse) => {
@@ -27,7 +27,7 @@ class MediaEndpoint {
         };
       }
 
-      return { ok: true, value: fetchResponse };
+      return {ok: true, value: fetchResponse};
     });
   }
 
@@ -44,7 +44,7 @@ class MediaEndpoint {
     const url = responseBody["url"];
 
     if (!url) {
-      return { ok: false, error: Error("response.value['url'] undefined") };
+      return {ok: false, error: Error("response.value['url'] undefined")};
     }
 
     const fileResponse = await this.fetchData(url);
@@ -55,6 +55,6 @@ class MediaEndpoint {
 
     const fileResponseData = fileResponse.value.body;
 
-    return { ok: true, value: fileResponseData };
+    return {ok: true, value: fileResponseData};
   }
 }

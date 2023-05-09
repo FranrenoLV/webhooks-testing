@@ -44,9 +44,17 @@ class Mediator {
     Logger.log(`${webhookModel.toString()}`);
 
     Logger.log("Setting at collection");
-    const setResult = await this.databse.setCollectionDocument(
-      "webhooksListener",
-      webhookModel.toJson()
+    const uploadDataFromWebhook = webhookModel.formatToStructuredUpload();
+
+    if (!uploadDataFromWebhook.storeMessage) {
+      response.status(200).send("Wont store message");
+      return;
+    }
+
+    const setResult = await this.databse.setNewMessageAtUserConversation(
+      uploadDataFromWebhook.contactPhoneNumber!,
+      uploadDataFromWebhook.received! ? "received" : "sent",
+      uploadDataFromWebhook.value!
     );
 
     if (!setResult.ok) {

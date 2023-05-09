@@ -1,5 +1,6 @@
 import * as admin from "firebase-admin";
 import {Logger} from "../helpers/logger";
+import {Timestamp} from "firebase-admin/firestore";
 
 export {FirestoreDatabase};
 
@@ -89,6 +90,46 @@ class FirestoreDatabase {
     return {
       ok: true,
       value: `Document @ ${rootCollection} setted`,
+    };
+  }
+
+  public async setNewMessageAtUserConversation(
+    contactPhoneNumber: string,
+    receivedOrSent: string,
+    data: Record<string, any>
+  ): Promise<Result<string, Error>> {
+    try {
+      const exists: boolean = await admin
+        .firestore()
+        .collection("webhooksListener")
+        .doc(contactPhoneNumber)
+        .get()
+        .then((documentSnapshot) => {
+          return documentSnapshot.exists;
+        });
+
+      if (!exists) {
+        await admin
+          .firestore()
+          .collection("webhooksListener")
+          .doc(contactPhoneNumber)
+          .create({createdTime: Timestamp.now()});
+      }
+
+      await admin
+        .firestore()
+        .collection("webhooksListener")
+        .doc(contactPhoneNumber)
+        .collection(receivedOrSent)
+        .doc()
+        .set(data);
+    } catch (error: any) {
+      return {ok: false, error: Error(error)};
+    }
+
+    return {
+      ok: true,
+      value: `Document @ ${contactPhoneNumber}/${receivedOrSent} setted`,
     };
   }
 }

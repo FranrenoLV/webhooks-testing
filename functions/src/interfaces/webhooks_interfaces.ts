@@ -236,3 +236,15 @@ export interface WhatsappAPIMediaData {
   file_size: string;
   id: string;
 }
+
+export type WhatsappAPIDatabaseModel = {
+  /** Checks if the message should be stored in database. */
+  storeMessage: boolean;
+  /** Set to `true` if the message was received from user.
+   * Otherwise is set to `false` if message was sent to user. */
+  received?: boolean;
+  /** Number from customer.  */
+  contactPhoneNumber?: string;
+  /** Messages field. */
+  value?: WhatsappAPIValue;
+};
